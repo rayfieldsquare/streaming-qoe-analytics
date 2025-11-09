@@ -1,0 +1,32 @@
+# Python
+*.pyc
+*.pyo
+.*_cache
+wine-py2exe/
+py2exe.log
+build/
+dist/
+zip/
+tmp/
+venv/
+qoe_analytics_env/
+
+# Misc
+*~
+*.DS_Store
+*.kate-swp
+MANIFEST
+test/local_parameters.json
+.coverage
+cover/
+secrets/
+updates_key.pem
+*.egg-info
+.tox
+*.class
+*.isorted
+*.stackdump
+uv.lock
+
+# Jupyter
+.ipynb_checkpoints
