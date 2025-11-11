@@ -3,13 +3,17 @@
 An example project on how to build a telemetry QoE analytics pipeline for a fictional streaming service using Python, Spark, Airflow and Postgres.
 
 # Introduction & Goals
-- Introduce your project to the reader
-- Orient this section on the Table of contents
-- Executive summary -- assuming ...
-  - With what simulated data
-  - What tools are you using
-  - What are you doing with these tools
-  - Once you are finished add the conclusion here as well
+Imagine you're watching your favourite streaming service on your very expensive, super-smart, flat-screen TV. Sometimes it starts playing instantly, sometimes you see a loading spinner. Sometimes the video looks crystal clear, sometimes it's blurry. **This streaming service wants to know WHY these things happen.**
+
+We're going to build a **mini-version of the streaming service's quality monitoring system** - the thing that helps them understand the following:
+
+- How long does it take for shows to start playing?
+- How often does the video pause to buffer (that annoying loading spinner)?
+- Is the video quality good or bad?
+- Which devices have problems?
+- Which countries have slow connections?
+
+Think of it like this: If the streaming service is a restaurant, we're building the "customer feedback system" - but instead of comment cards, we're collecting millions of automatic measurements every second.
 
 # Contents
 
@@ -71,6 +75,13 @@ The generated data is saved to a CSV file named `streaming_telemetry.csv` in the
 
 ```
 
+### Metrics Explained
+
+- **startup_time_ms**: Milliseconds from play button to first frame
+- **rebuffer_count**: Number of buffering interruptions
+- **bitrate_kbps**: Video quality in kilobits per second
+- **resolution**: Final video resolution (4K, 1080p, 720p, 480p)
+
 
 # Used Tools
 - Explain which tools we use and why
@@ -85,8 +96,47 @@ The generated data is saved to a CSV file named `streaming_telemetry.csv` in the
 ## Visualization
 
 # Pipelines
-- Explain the pipelines for processing that we are building
-- Go through our development and add our source code
+**Pipeline** = A series of automated steps that data flows through, like water through pipes.
+
+**Real-world example at our streaming service:**
+
+```
+User watches show → Data sent to servers → Data validated →
+Data cleaned → Data organized → Data stored → Dashboards updated
+
+```
+
+All of this happens **automatically**, **every hour**, for **millions of users**.
+
+We're building a mini-version that:
+
+- Reads our fake data
+- Validates it (checks for errors)
+- Transforms it (makes it useful)
+- Stores it (organizes it for analysis)
+- Monitors it (alerts if something breaks)
+
+## The Pipeline Architecture
+```
+┌─────────────────────────────────────────────────────────┐
+│                     DATA PIPELINE                       │
+└─────────────────────────────────────────────────────────┘
+
+INPUT                                              OUTPUT
+  │                                                  │
+  ▼                                                  ▼
+┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
+│  Raw     │───▶│ Validate │───▶│Transform │───▶│  Clean   │
+│  Data    │    │ & Clean  │    │ & Enrich │    │  Data    │
+│  (CSV)   │    │          │    │          │    │(Database)│
+└──────────┘    └──────────┘    └──────────┘    └──────────┘
+                     │                │               │
+                     ▼                ▼               ▼
+                ┌─────────┐     ┌─────────┐     ┌─────────┐
+                │ Quality │     │  Error  │     │ Success │
+                │  Checks │     │   Logs  │     │ Metrics │
+                └─────────┘     └─────────┘     └─────────┘
+```
 
 ## Stream Processing
 ### Storing Data Stream
