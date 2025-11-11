@@ -34,7 +34,7 @@ An example project on how to build a telemetry QoE analytics pipeline for a fict
 
 # The Data Set
 
-## Netflix QoE Telemetry Generator
+## The Streaming Service QoE Telemetry Generator
 
 ### What This Does
 
