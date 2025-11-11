@@ -175,7 +175,129 @@ def generate_bitrate(network_type):
 
     return bitrate, quality
 
+def inject_realistic_bugs(df):
+    """
+    Add realistic bugs that platform engineers would need to find!
+    """
+    print("\n🐛 Injecting realistic bugs...")
 
+    # Bug 1: iOS 15.3 has 2x slower startup on iPhones
+    ios_15_3_mask = df['os_version'].str.contains('iPhone', na=False) & \
+                    (df['device_type'] == 'mobile')
+
+    # 20% of mobile users have this iOS version
+    ios_15_3_users = df[ios_15_3_mask].sample(frac=0.20)
+
+    # Double their startup time
+    df.loc[ios_15_3_users.index, 'startup_time_ms'] *= 2
+
+    print(f"  - Added iOS 15.3 bug affecting {len(ios_15_3_users):,} sessions")
+
+    # Bug 2: Certain content (content_42) has encoding issues on Smart TVs
+    problem_content = (df['content_id'] == 'content_42') & \
+                      (df['device_type'] == 'smart_tv')
+
+    # These sessions buffer way more
+    df.loc[problem_content, 'rebuffer_count'] *= 3
+    df.loc[problem_content, 'rebuffer_duration_ms'] *= 3
+
+    print(f"  - Added content encoding bug affecting {problem_content.sum():,} sessions")
+
+    # Bug 3: Brazilian ISP "BrazilNet" has routing issues
+    # (higher latency = slower startup)
+    brazil_isp_issue = (df['country_code'] == 'BR') & \
+                       (df['isp'] == 'Comcast')  # Pretend "Comcast" is "BrazilNet" in Brazil
+
+    df.loc[brazil_isp_issue, 'startup_time_ms'] += 1500  # Add 1.5 second delay
+
+    print(f"  - Added ISP routing bug affecting {brazil_isp_issue.sum():,} sessions")
+
+    return df
+
+def add_realistic_time_patterns(df):
+    """
+    Make viewing patterns match real user behavior.
+    Peak hours: 7pm-11pm
+    Peak days: Friday-Sunday
+    """
+    print("\n📅 Adding time-based viewing patterns...")
+
+    # Add hour and day of week
+    df['hour'] = df['timestamp'].dt.hour
+    df['day_of_week'] = df['timestamp'].dt.dayofweek  # 0=Monday, 6=Sunday
+
+    # Weight sessions toward peak times
+    # We'll do this by duplicating some sessions during peak hours
+    peak_hours = (df['hour'] >= 19) & (df['hour'] <= 23)
+    weekend = df['day_of_week'].isin([5, 6])  # Friday, Saturday
+
+    # Sessions during peak times get duplicated (simulating more viewers)
+    peak_sessions = df[peak_hours | weekend].sample(frac=0.3)
+
+    print(f"  - Added {len(peak_sessions):,} additional peak-time sessions")
+
+    # Combine original + peak duplicates
+    df_enhanced = pd.concat([df, peak_sessions], ignore_index=True)
+    df_enhanced = df_enhanced.sort_values('timestamp').reset_index(drop=True)
+
+    return df_enhanced
+
+def validate_telemetry_data(df):
+    """
+    Check if our generated data looks realistic.
+    This is like quality control!
+    """
+    print("\n🔍 Validating generated data...\n")
+
+    issues = []
+
+    # Check 1: No missing values
+    missing = df.isnull().sum()
+    if missing.any():
+        issues.append(f"❌ Found missing values:\n{missing[missing > 0]}")
+    else:
+        print("✅ No missing values")
+
+    # Check 2: Reasonable startup times (should be 100ms to 30 seconds)
+    bad_startup = ((df['startup_time_ms'] < 100) |
+                   (df['startup_time_ms'] > 30000)).sum()
+    if bad_startup > 0:
+        issues.append(f"❌ {bad_startup} sessions have unrealistic startup times")
+    else:
+        print("✅ All startup times are realistic")
+
+    # Check 3: Rebuffer duration makes sense
+    # (can't rebuffer for 0ms if rebuffer_count > 0)
+    bad_rebuffer = ((df['rebuffer_count'] > 0) &
+                    (df['rebuffer_duration_ms'] == 0)).sum()
+    if bad_rebuffer > 0:
+        issues.append(f"❌ {bad_rebuffer} sessions have rebuffers but no duration")
+    else:
+        print("✅ Rebuffer logic is consistent")
+
+    # Check 4: Timestamps are in order
+    if not df['timestamp'].is_monotonic_increasing:
+        issues.append("❌ Timestamps are not in chronological order")
+    else:
+        print("✅ Timestamps are properly ordered")
+
+    # Check 5: Distribution looks realistic
+    print("\n📊 Data Distribution:")
+    print(f"  Device Types:\n{df['device_type'].value_counts(normalize=True).mul(100).round(1)}")
+    print(f"\n  Network Types:\n{df['network_type'].value_counts(normalize=True).mul(100).round(1)}")
+    print(f"\n  Average Metrics:")
+    print(f"    Startup Time: {df['startup_time_ms'].mean():.0f}ms (median: {df['startup_time_ms'].median():.0f}ms)")
+    print(f"    Rebuffer Rate: {(df['rebuffer_count'] > 0).mean() * 100:.1f}% of sessions had buffering")
+    print(f"    Avg Session Duration: {df['session_duration_sec'].mean() / 60:.1f} minutes")
+
+    if issues:
+        print("\n⚠️  VALIDATION ISSUES FOUND:")
+        for issue in issues:
+            print(issue)
+        return False
+    else:
+        print("\n✅ All validation checks passed!")
+        return True
 
 ################################# MAIN GENERATION FUNCTION #################################
 
@@ -266,6 +388,7 @@ def generate_telemetry_data(num_sessions=NUM_SESSIONS):
     return df
 
 
+
 ###################################### RUN THE GENERATOR ######################################
 
 if __name__ == "__main__":
@@ -274,6 +397,14 @@ if __name__ == "__main__":
 
     # Save to CSV file
     output_file = './output/streaming_telemetry.csv'
+
+    # ...but first, inject some realistic bugs and add realistic time patterns!
+    telemetry_df = inject_realistic_bugs(telemetry_df)
+    telemetry_df = add_realistic_time_patterns(telemetry_df)
+
+    # After generating and enhancing data, validate it
+    validate_telemetry_data(telemetry_df)
+
     telemetry_df.to_csv(output_file, index=False)
     print(f"\n💾 Saved to '{output_file}'")
 
