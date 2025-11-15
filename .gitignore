@@ -30,3 +30,7 @@ uv.lock
 
 # Jupyter
 .ipynb_checkpoints
+
+# Airflow
+pipelines/airflow/logs/
+pipelines/airflow/airflow.*

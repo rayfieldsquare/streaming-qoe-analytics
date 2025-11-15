@@ -144,6 +144,37 @@ INPUT                                              OUTPUT
 ## Batch Processing
 ## Visualizations
 
+## Data Flow (Session Journey)
+```
+1. GENERATION
+   User device → Session telemetry → CSV file
+
+2. INGESTION
+   CSV → Pandas DataFrame → Validation
+
+3. VALIDATION
+   Quality checks → Pass/Fail → Cleaned DataFrame
+
+4. TRANSFORMATION
+   Raw metrics → Calculated features → Enriched DataFrame
+
+5. DIMENSION LOOKUP
+   Device "iPhone" → device_key 42
+   Country "BR" → geo_key 15
+
+6. FACT LOADING
+   Enriched data + dimension keys → fact_playback_sessions table
+
+7. AGGREGATION
+   Fact table → GROUP BY date/device → agg_daily_device_quality
+
+8. QUERY
+   Dashboard request → SQL → Aggregate table → Results
+
+9. VISUALIZATION
+   Query results → Plotly chart → User's browser
+```
+
 # Demo
 - We could add a demo video here
 - Or link to our presentation video of the project
@@ -155,7 +186,7 @@ Write a comprehensive conclusion.
 - What were the biggest challenges
 
 # Follow Me On
-Add the link to LinkedIn Profile
+[LinkedIn](https://www.linkedin.com/in/sada-garba/)
 
 # Appendix
 

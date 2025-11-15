@@ -382,8 +382,8 @@ def generate_telemetry_data(num_sessions=NUM_SESSIONS):
     df = df.sort_values('timestamp').reset_index(drop=True)
 
     print(f"\n✅ Generated {len(df):,} sessions!")
-    print(f"📅 Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
-    print(f"📊 Data size: {df.memory_usage(deep=True).sum() / 1024 / 1024:.2f} MB")
+    print(f" Date range: {df['timestamp'].min()} to {df['timestamp'].max()}")
+    print(f" Data size: {df.memory_usage(deep=True).sum() / 1024 / 1024:.2f} MB")
 
     return df
 
@@ -396,7 +396,7 @@ if __name__ == "__main__":
     telemetry_df = generate_telemetry_data()
 
     # Save to CSV file
-    output_file = './output/streaming_telemetry.csv'
+    output_file = '../data/streaming_telemetry.csv'
 
     # ...but first, inject some realistic bugs and add realistic time patterns!
     telemetry_df = inject_realistic_bugs(telemetry_df)
