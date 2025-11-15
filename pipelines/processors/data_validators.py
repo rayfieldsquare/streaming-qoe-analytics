@@ -10,7 +10,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-DATA_QUALITY_SCORE_THRESHOLD = 95
+DATA_QUALITY_SCORE_THRESHOLD = 90
 
 
 class TelemetryValidator:

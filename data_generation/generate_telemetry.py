@@ -4,6 +4,7 @@ from faker import Faker
 from datetime import datetime, timedelta
 import random
 import uuid
+import os
 
 # initialize faker
 fake = Faker()
@@ -396,7 +397,10 @@ if __name__ == "__main__":
     telemetry_df = generate_telemetry_data()
 
     # Save to CSV file
-    output_file = '../data/streaming_telemetry.csv'
+    # set BASE_DIR to the dir of the project
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    DATA_DIR = os.path.join(BASE_DIR, 'data')
+    output_file = os.path.join(DATA_DIR, 'streaming_telemetry.csv')
 
     # ...but first, inject some realistic bugs and add realistic time patterns!
     telemetry_df = inject_realistic_bugs(telemetry_df)
