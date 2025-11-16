@@ -27,6 +27,7 @@ updates_key.pem
 *.isorted
 *.stackdump
 uv.lock
+.env
 
 # Jupyter
 .ipynb_checkpoints
