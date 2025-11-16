@@ -1,39 +1,31 @@
 # This is a setup script meant to be invoked from the root directory of the project
 # after initial git clone before anything is executed.  You should run this file only once!
 
-# 1.  Pip install dependencies
+# 1.  Setup Airflow
+docker compose up airflow-init
+
+# 2.  Launch all other services including analytics warehouse database
+docker-compose up -d  # Starts airflow and warehouse database (postgres)
+
+# 3.  Pip install local dependencies
 pip install -r requirements.txt
 
-# 2.  Generate fake telemetry data
+# 4.  Generate fake telemetry data
 python data_generation/generate_telemetry.py
-
-# 3.  Setup Postgres database
-docker-compose up -d  # Starts PostgreSQL
-
-# 4.  Setup Airflow
-export AIRFLOW_HOME=$(pwd)/pipelines/airflow  # must be absolute path
-export AIRFLOW__CORE__AUTH_MANAGER="airflow.providers.fab.auth_manager.fab_auth_manager.FabAuthManager"
-
-airflow db migrate
-airflow users create \
-    --username airflow \
-    --firstname Rayfeld \
-    --lastname Square \
-    --role Admin \
-    --email inspector@rayfieldsquare.com \
-    --password airflow
-
-    # Start the web server like this ... (this gives you a visual interface)
-    # airflow webserver --port 8080
-
-    # Start the scheduler (in a second terminal) like this ... (this actually runs your pipelines and executes the workflows)
-    # airflow scheduler
-
-    # The aifflow dashboard will be visible here:
-    # http://localhost:8080
     
+# 5. Login to Airflow
+# visit http://localhost:8080  
+# Username: airflow, Password: airflow
+#. Search for the "streaming_qoe_pipeline" DAG and Trigger / Unpause it to see it run
 
-# 5.  Setup Spark (optional)
+# 6.  Populate Dimensions in warehouse database
+python warehouse/populate_dimensions.py
 
-# 6.  Setup Dashboards
+# 7. Load fact data (generated from the airflow pipeline in step 5) into the warehouse database
+python warehouse/load_fact_data.py
+
+# 8. Create aggregates in warehouse database
+docker exec -i streaming_analytics psql -U analytics_user -d streaming_analytics < warehouse/create_aggregates.sql
+
+# 9.  Setup Dashboards
 

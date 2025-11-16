@@ -62,7 +62,7 @@ class PipelineMonitor:
         # In production:
         # slack_webhook.send(message)
         # or
-        # send_email(to='team@netflix.com', subject='Pipeline Alert', body=message)
+        # send_email(to='team@rayfieldsquare.com', subject='Pipeline Alert', body=message)
 
 
 if __name__ == "__main__":

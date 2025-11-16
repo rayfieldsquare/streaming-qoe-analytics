@@ -73,7 +73,7 @@ CREATE TABLE dim_device (
     manufacturer VARCHAR(100),  -- 'Samsung', 'Apple', 'LG', etc.
     model VARCHAR(100),  -- 'Galaxy S23', 'iPhone 15', etc.
     os_name VARCHAR(50),  -- 'iOS', 'Android', 'webOS', 'Windows'
-    os_version VARCHAR(50),  -- '16.3', '13.0', etc.
+    os_version VARCHAR(200),  -- 'Mozilla/5.0 (Linux; Android 1.0) AppleWebKit/536.1 (KHTML, like Gecko) Chrome/37.0.858.0 Safari/536.1', '16.3', '13.0', etc.
     app_version VARCHAR(50),  -- 'v17.2.1'
     screen_size VARCHAR(20),  -- 'small', 'medium', 'large'
     supports_4k BOOLEAN,  -- Can this device play 4K?

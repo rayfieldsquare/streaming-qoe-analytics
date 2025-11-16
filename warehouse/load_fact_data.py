@@ -1,3 +1,4 @@
+import os
 import psycopg2
 from psycopg2.extras import execute_batch
 import pandas as pd
@@ -5,7 +6,7 @@ from datetime import datetime
 import logging
 import numpy as np
 
-from data_generation.generate_telemetry import BASE_DIR
+# from data_generation.generate_telemetry import BASE_DIR
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -254,7 +255,7 @@ def load_fact_data(csv_file='streaming_telemetry_transformed.csv', batch_size=10
     dim_lookup = DimensionKeyLookup(conn)
 
     # Read CSV
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)), '..')
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     df = pd.read_csv(os.path.join(BASE_DIR, 'data', csv_file), parse_dates=['timestamp'])
     logger.info(f"📊 Loaded {len(df):,} rows from CSV")
 
@@ -273,8 +274,9 @@ def load_fact_data(csv_file='streaming_telemetry_transformed.csv', batch_size=10
             date_key = dim_lookup.get_date_key(timestamp)
             time_key = dim_lookup.get_time_key(timestamp)
 
-            if not date_key or not time_key:
+            if not date_key or time_key is None:
                 logger.warning(f"Missing date/time key for row {idx}")
+                logger.warning(f"-- timestamp: {timestamp}, date_key: {date_key}, time_key: {time_key}")
                 error_count += 1
                 continue
 

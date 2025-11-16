@@ -308,7 +308,7 @@ services:
     container_name: streaming_analytics_adminer
     
     ports:
-      - "8089:8089"
+      - "8089:8080"
     
     environment:
       ADMINER_DEFAULT_SERVER: warehouse

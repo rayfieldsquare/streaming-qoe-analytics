@@ -89,11 +89,6 @@ The generated data is saved to a CSV file named `streaming_telemetry.csv` in the
 - Why did we choose them
 - How did we set them up
 
-## Connect
-## Buffer
-## Processing
-## Storage
-## Visualization
 
 # Pipelines
 **Pipeline** = A series of automated steps that data flows through, like water through pipes.
@@ -174,6 +169,64 @@ INPUT                                              OUTPUT
 9. VISUALIZATION
    Query results → Plotly chart → User's browser
 ```
+
+# Data Warehouse
+
+### Architecture
+
+**Star Schema Design**
+- 1 Fact Table: `fact_playback_sessions` (100K+ rows)
+- 7 Dimension Tables: date, time, device, geography, content, network, user_cohort
+- 4 Aggregate Tables: Daily and hourly pre-aggregated metrics
+- 4 Views: Common analytical queries
+
+### Database: PostgreSQL
+
+**Why PostgreSQL?**
+- Industry-standard OLAP database
+- Excellent query optimizer
+- Rich analytical functions (percentiles, window functions)
+- Similar to production warehouses (Redshift, Snowflake)
+
+### Key Features
+
+**1. Dimensional Modeling**
+- Star schema for fast analytical queries
+- Surrogate keys for efficient joins
+- Slowly changing dimensions (SCD Type 2 ready)
+
+**2. Query Performance**
+- Strategic indexing on fact table
+- Pre-aggregated summary tables
+- Materialized views for complex queries
+- Partitioning-ready design
+
+**3. Data Quality**
+- Referential integrity constraints
+- Automated quality checks
+- Duplicate detection
+- Range validation
+
+### Sample Queries
+
+**Overall Health:**
+```sql
+SELECT
+    AVG(overall_qoe_score) as avg_qoe,
+    AVG(startup_time_ms) as avg_startup
+FROM fact_playback_sessions;
+```
+**Device Performance:**
+```sql
+SELECT
+    device_type,
+    AVG(overall_qoe_score) as avg_qoe
+FROM fact_playback_sessions f
+JOIN dim_device d ON f.device_key = d.device_key
+GROUP BY device_type;
+```
+
+# Visualization
 
 # Demo
 - We could add a demo video here
