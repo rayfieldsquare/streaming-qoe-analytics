@@ -168,7 +168,7 @@ def task_4_calculate_aggregates(**context):
     ]
 
     # Save aggregates
-    agg_file = f'{DATA_DIR}/netflix_qoe_daily_aggregates.csv'
+    agg_file = f'{DATA_DIR}/streaming_qoe_daily_aggregates.csv'
     aggregates.to_csv(agg_file, index=False)
 
     logging.info(f"✅ Created {len(aggregates):,} aggregate rows")

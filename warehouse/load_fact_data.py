@@ -232,7 +232,7 @@ class DimensionKeyLookup:
 # FACT DATA LOADER
 # ============================================
 
-def load_fact_data(csv_file='netflix_telemetry_transformed.csv', batch_size=1000):
+def load_fact_data(csv_file='streaming_telemetry_transformed.csv', batch_size=1000):
     """
     Load transformed telemetry data into fact table.
 
@@ -402,4 +402,4 @@ def _insert_fact_batch(cursor, batch):
 # ============================================
 
 if __name__ == "__main__":
-    load_fact_data('netflix_telemetry_transformed.csv')
+    load_fact_data('streaming_telemetry_transformed.csv')

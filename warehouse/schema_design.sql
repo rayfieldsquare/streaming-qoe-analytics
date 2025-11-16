@@ -146,12 +146,12 @@ CREATE TABLE dim_geography (
 -- WHY: Analyze quality by content type, genre, duration
 CREATE TABLE dim_content (
     content_key SERIAL PRIMARY KEY,
-    content_id VARCHAR(100),  -- Netflix's internal content ID
+    content_id VARCHAR(100),  -- Streaming Service's internal content ID
     content_type VARCHAR(50),  -- 'movie', 'episode', 'documentary'
     genre VARCHAR(100),  -- 'Action', 'Comedy', 'Drama', etc.
     duration_minutes INTEGER,  -- Length of content
     release_year INTEGER,
-    is_original BOOLEAN,  -- Netflix Original content?
+    is_original BOOLEAN,  -- Streaming Service Original content?
     video_codec VARCHAR(50),  -- 'H.264', 'H.265', 'AV1'
     max_resolution VARCHAR(10),  -- Highest quality available
 

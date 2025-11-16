@@ -46,7 +46,7 @@ def generate_session_id():
 def generate_user_id():
     """
     Create a unique user ID.
-    In reality, Netflix has 300M users, we'll simulate 1M
+    In reality, a service like Netflix has 300M users, here we'll simulate 1M
     """
     return f'user_{random.randint(1, 1000000)}'
 
@@ -139,7 +139,7 @@ def generate_bitrate(network_type):
     - High pressure (bitrate) = clear, beautiful picture
     - Low pressure (bitrate) = blurry, pixelated picture
 
-    Netflix automatically adjusts quality based on your internet speed!
+    Account for automatically adjusts quality based on your internet speed!
     """
     # Quality tiers with their bitrates (kbps)
     quality_tiers = {

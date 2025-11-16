@@ -15,7 +15,7 @@ DATA_QUALITY_SCORE_THRESHOLD = 90
 
 class TelemetryValidator:
     """
-    Validates Netflix telemetry data.
+    Validates streaming telemetry data.
 
     Think of this as a quality inspector at a factory -
     it checks every piece of data to make sure it's good!
@@ -344,7 +344,7 @@ class TelemetryValidator:
 # Example usage
 if __name__ == "__main__":
     # Load the data we generated in Step 1
-    df = pd.read_csv('../../data/streaming_telemetry.csv')
+    df = pd.read_csv('../../../data/streaming_telemetry.csv')
     
     # Validate it
     validator = TelemetryValidator()
@@ -355,7 +355,7 @@ if __name__ == "__main__":
         print(f"Quality Score: {report['data_quality_score']}%")
         
         # Save cleaned data
-        clean_df.to_csv('../../data/streaming_telemetry_clean.csv', index=False)
+        clean_df.to_csv('../../../data/streaming_telemetry_clean.csv', index=False)
         print("💾 Saved clean data to 'streaming_telemetry_clean.csv'")
     else:
         print("\n❌ Data failed validation!")

@@ -1,4 +1,4 @@
-# Netflix QoE Analytics - PostgreSQL Data Warehouse
+# Streaming Service QoE Analytics - PostgreSQL Data Warehouse
 # This Dockerfile creates a PostgreSQL container with our schema pre-loaded
 
 FROM postgres:16-alpine

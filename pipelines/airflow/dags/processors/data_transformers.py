@@ -36,7 +36,7 @@ class TelemetryTransformer:
         Extract useful time-based features from timestamp.
 
         WHY THIS MATTERS:
-        Netflix wants to know "when do quality issues happen?"
+        We want to know "when do quality issues happen?"
         - During peak hours? (more server load)
         - On weekends? (different content)
         - At night? (different network conditions)
@@ -80,7 +80,6 @@ class TelemetryTransformer:
         """
         Calculate derived QoE metrics.
 
-        THESE ARE THE METRICS NETFLIX ACTUALLY USES!
         They tell us "how good was this viewing session?"
         """
         logger.info("  Calculating quality metrics...")
@@ -276,7 +275,7 @@ class TelemetryTransformer:
 
         df['region'] = df['country_code'].map(region_map)
 
-        # Market maturity (how long Netflix has been there)
+        # Market maturity (how long our service has been established in that locale)
         # Mature markets tend to have better infrastructure
         market_maturity_map = {
             'US': 'mature',
@@ -314,7 +313,7 @@ class TelemetryTransformer:
 # Example usage
 if __name__ == "__main__":
     # Load cleaned data from validation step
-    df = pd.read_csv('../../data/streaming_telemetry_clean.csv')
+    df = pd.read_csv('../../../data/streaming_telemetry_clean.csv')
 
     # Transform it
     transformer = TelemetryTransformer()
@@ -334,5 +333,5 @@ if __name__ == "__main__":
     print(transformed_df['session_quality'].value_counts(normalize=True).mul(100).round(1))
 
     # Save transformed data
-    transformed_df.to_csv('../../data/streaming_telemetry_transformed.csv', index=False)
+    transformed_df.to_csv('../../../data/streaming_telemetry_transformed.csv', index=False)
     print("\n Saved transformed data to 'streaming_telemetry_transformed.csv'")

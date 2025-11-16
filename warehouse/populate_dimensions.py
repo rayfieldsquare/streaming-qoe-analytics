@@ -267,7 +267,7 @@ def populate_dim_content(conn):
     """
     Populate content dimension with sample content.
 
-    In reality, this would come from Netflix's content catalog API.
+    In reality, with a service like Netflix, this would come from their content catalog API.
     """
     logger.info("🎬 Populating dim_content...")
 
@@ -287,7 +287,7 @@ def populate_dim_content(conn):
             genres[i % len(genres)],
             45 if i % 2 == 1 else 120,  # Episodes 45min, Movies 120min
             2020 + (i % 5),  # Release years 2020-2024
-            i % 3 == 0,  # Every 3rd is a Netflix Original
+            i % 3 == 0,  # Every 3rd is a Streaming Service Original production
             codecs[i % len(codecs)],
             '4K' if i % 4 == 0 else '1080p'  # 25% are 4K
         )
