@@ -21,10 +21,10 @@ def get_db_connection():
     try:
         conn = psycopg2.connect(
             host="localhost",
-            port=5432,
-            database="netflix_analytics",
-            user="postgres",
-            password="netflix123"  # Use your actual password!
+            port=5433,
+            database="streaming_analytics",
+            user="analytics_user",
+            password="analytics_password"  # Use your actual password!
         )
         logger.info("✅ Connected to database")
         return conn

@@ -18,10 +18,10 @@ def get_db_connection():
     """Connect to PostgreSQL database."""
     conn = psycopg2.connect(
         host="localhost",
-        port=5432,
-        database="netflix_analytics",
-        user="postgres",
-        password="netflix123"
+        port=5433,
+        database="streaming_analytics",
+        user="analytics_user",
+        password="analytics_password"
     )
     return conn
 

@@ -1,8 +1,8 @@
 -- ============================================
--- NETFLIX QOE DATA WAREHOUSE SCHEMA
+-- STREAMING SERVICE QOE DATA WAREHOUSE SCHEMA
 -- ============================================
 -- This creates our "organized library" structure
--- for analyzing Netflix streaming quality
+-- for analyzing the streaming quality of our service
 
 -- Drop existing tables if they exist (for clean reruns)
 DROP TABLE IF EXISTS fact_playback_sessions CASCADE;
@@ -346,7 +346,7 @@ ORDER BY t.hour;
 -- ============================================
 -- Add descriptions to tables so others understand them
 
-COMMENT ON TABLE fact_playback_sessions IS 'Core fact table containing Netflix playback session metrics';
+COMMENT ON TABLE fact_playback_sessions IS 'Core fact table containing streaming service playback session metrics';
 COMMENT ON TABLE dim_date IS 'Date dimension for time-based analysis';
 COMMENT ON TABLE dim_device IS 'Device dimension including hardware, OS, and app version';
 COMMENT ON TABLE dim_geography IS 'Geographic dimension with country, region, ISP, and CDN data';

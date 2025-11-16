@@ -270,7 +270,6 @@ services:
       <<: *airflow-common-depends-on
 
   warehouse:
-    <<: *airflow-common
     build:
       context: ./warehouse
       dockerfile: Dockerfile
@@ -279,15 +278,29 @@ services:
       POSTGRES_DB: streaming_analytics
       POSTGRES_USER: analytics_user
       POSTGRES_PASSWORD: analytics_password
+    env_file:
+      - ${ENV_FILE_PATH:-.env}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     
     # Persistent volume for data
     # This ensures data survives container restarts
     volumes:
       - postgres_warehouse_data:/var/lib/postgresql/data
       - ./warehouse/backups:/backups 
+      - ${AIRFLOW_PROJ_DIR:-.}/data:/data
       # - ./data:/data  # Mount data directory for loading CSV files
+
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analytics_user -d streaming_analytics"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    # Restart policy
+    restart: unless-stopped
 
   # Adminer - Lightweight database management (alternative to pgAdmin)
   adminer:
