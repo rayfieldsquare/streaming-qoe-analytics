@@ -27,5 +27,7 @@ python warehouse/load_fact_data.py
 # 8. Create aggregates in warehouse database
 docker exec -i streaming_analytics psql -U analytics_user -d streaming_analytics < warehouse/create_aggregates.sql
 
-# 9.  Setup Dashboards
+# 9.  Run the Dashboards
+cd dashboards
+streamlit run home.py
 
