@@ -267,9 +267,9 @@ This architecture balances:
 
 For a quickstart guide, see [quickstart.md](quickstart.md).
 
-# Follow Me On
+## Follow Me On
 [LinkedIn](https://www.linkedin.com/in/sada-garba/)
 
-# Appendix
+## Appendix
 
 [Markdown Cheat Sheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
