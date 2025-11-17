@@ -18,20 +18,11 @@ Think of it like this: If the streaming service is a restaurant, we're building 
 # Contents
 
 - [The Data Set](#the-data-set)
-- [Used Tools](#used-tools)
-  - [Connect](#connect)
-  - [Buffer](#buffer)
-  - [Processing](#processing)
-  - [Storage](#storage)
-  - [Visualization](#visualization)
 - [Pipelines](#pipelines)
-  - [Stream Processing](#stream-processing)
-    - [Storing Data Stream](#storing-data-stream)
-    - [Processing Data Stream](#processing-data-stream)
-  - [Batch Processing](#batch-processing)
-  - [Visualizations](#visualizations)
-- [Demo](#demo)
+- [Data Warehouse](#data-warehouse)
+- [Visualizations](#visualizations)
 - [Conclusion](#conclusion)
+- [Quickstart](#quickstart)
 - [Follow Me On](#follow-me-on)
 - [Appendix](#appendix)
 
@@ -83,13 +74,6 @@ The generated data is saved to a CSV file named `streaming_telemetry.csv` in the
 - **resolution**: Final video resolution (4K, 1080p, 720p, 480p)
 
 
-# Used Tools
-- Explain which tools we use and why
-- How do they work (don't go too deep into details, but add links)
-- Why did we choose them
-- How did we set them up
-
-
 # Pipelines
 **Pipeline** = A series of automated steps that data flows through, like water through pipes.
 
@@ -132,12 +116,6 @@ INPUT                                              OUTPUT
                 │  Checks │     │   Logs  │     │ Metrics │
                 └─────────┘     └─────────┘     └─────────┘
 ```
-
-## Stream Processing
-### Storing Data Stream
-### Processing Data Stream
-## Batch Processing
-## Visualizations
 
 ## Data Flow (Session Journey)
 ```
@@ -226,17 +204,68 @@ JOIN dim_device d ON f.device_key = d.device_key
 GROUP BY device_type;
 ```
 
-# Visualization
+# Visualizations
+## Interactive Dashboards
 
-# Demo
-- We could add a demo video here
-- Or link to our presentation video of the project
+### Three Dashboard Views
+
+**1. 📊 Executive Dashboard**
+- High-level QoE health metrics
+- 30-day quality trends
+- Geographic breakdown
+- Top issues summary
+- **Audience:** C-Suite, VPs, Directors
+
+**2. 🔧 Engineering Dashboard**
+- Device performance deep-dive
+- Percentile analysis (P50, P95, P99)
+- Hourly quality trends
+- Detailed issue investigation
+- **Audience:** Engineers, DevOps, SREs
+
+**3. 🎯 Product Dashboard**
+- Quality vs engagement correlation
+- Peak time usage patterns
+- Device preferences
+- Content performance
+- **Audience:** Product Managers, UX Researchers
+
+### Technology Stack
+
+- **Framework:** Streamlit (Python)
+- **Charts:** Plotly
+- **Database:** PostgreSQL
+- **Caching:** Streamlit cache (5-minute TTL)
+
+### Running Locally
+
+```bash
+cd dashboards
+streamlit run home.py
+```
+
+### Demo
+Navigate to the `screenshots` folder to view screenshots of the dashboards.
 
 # Conclusion
-Write a comprehensive conclusion.
-- How did this project turn out
-- What major things have we learned
-- What were the biggest challenges
+
+This architecture balances:
+- **Simplicity** - Easy to understand and maintain
+- **Scalability** - Clear path from 100K to 1B+ rows
+- **Performance** - Sub-second dashboard queries
+- **Reliability** - Multiple validation layers, monitoring
+- **Cost** - Free/cheap for development, scalable for production
+
+**Key Takeaways:**
+1. Star schema simplifies analytical queries
+2. Pre-aggregation is critical for dashboard performance
+3. Data quality checks prevent downstream issues
+4. Caching reduces database load significantly
+5. Documentation enables team collaboration
+
+# Quickstart
+
+For a quickstart guide, see [quickstart.md](quickstart.md).
 
 # Follow Me On
 [LinkedIn](https://www.linkedin.com/in/sada-garba/)
